@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>记一次mysql死锁问题 | originalxzx</title>
+    <meta name="description" content="Do your best, listen to your destiny.">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.9b7d2f06.css" as="style"><link rel="preload" href="/assets/js/app.bc3533d3.js" as="script"><link rel="preload" href="/assets/js/4.3246cf6a.js" as="script"><link rel="preload" href="/assets/js/1.4b387ef0.js" as="script"><link rel="preload" href="/assets/js/49.090490ed.js" as="script"><link rel="prefetch" href="/assets/js/10.5a07acb6.js"><link rel="prefetch" href="/assets/js/11.6db78610.js"><link rel="prefetch" href="/assets/js/12.b582827c.js"><link rel="prefetch" href="/assets/js/13.68cdd812.js"><link rel="prefetch" href="/assets/js/14.da9ec9bd.js"><link rel="prefetch" href="/assets/js/15.537fbde0.js"><link rel="prefetch" href="/assets/js/16.bed91d5e.js"><link rel="prefetch" href="/assets/js/17.d7abcb8e.js"><link rel="prefetch" href="/assets/js/18.31bf4703.js"><link rel="prefetch" href="/assets/js/19.3d0540f3.js"><link rel="prefetch" href="/assets/js/20.b7b95bba.js"><link rel="prefetch" href="/assets/js/21.b1525f58.js"><link rel="prefetch" href="/assets/js/22.74c56685.js"><link rel="prefetch" href="/assets/js/23.e05d4ed1.js"><link rel="prefetch" href="/assets/js/24.8393159a.js"><link rel="prefetch" href="/assets/js/25.cb3fcfa5.js"><link rel="prefetch" href="/assets/js/26.a72c979e.js"><link rel="prefetch" href="/assets/js/27.52ce487e.js"><link rel="prefetch" href="/assets/js/28.2645ac11.js"><link rel="prefetch" href="/assets/js/29.0b97d374.js"><link rel="prefetch" href="/assets/js/30.5f2a8054.js"><link rel="prefetch" href="/assets/js/31.85fef366.js"><link rel="prefetch" href="/assets/js/32.746fe5f3.js"><link rel="prefetch" href="/assets/js/33.10f1dec1.js"><link rel="prefetch" href="/assets/js/34.1301481b.js"><link rel="prefetch" href="/assets/js/35.d148349e.js"><link rel="prefetch" href="/assets/js/36.f40b96b8.js"><link rel="prefetch" href="/assets/js/37.03db8746.js"><link rel="prefetch" href="/assets/js/38.f413eb02.js"><link rel="prefetch" href="/assets/js/39.7a712ab4.js"><link rel="prefetch" href="/assets/js/40.37627ca1.js"><link rel="prefetch" href="/assets/js/41.aaa97500.js"><link rel="prefetch" href="/assets/js/42.96074a0d.js"><link rel="prefetch" href="/assets/js/43.8e52a380.js"><link rel="prefetch" href="/assets/js/44.c8a4a8ce.js"><link rel="prefetch" href="/assets/js/45.e504aaa3.js"><link rel="prefetch" href="/assets/js/46.4233ad42.js"><link rel="prefetch" href="/assets/js/47.edc24500.js"><link rel="prefetch" href="/assets/js/48.bea852cc.js"><link rel="prefetch" href="/assets/js/5.ad2fccbd.js"><link rel="prefetch" href="/assets/js/50.e66fa8af.js"><link rel="prefetch" href="/assets/js/51.a9d53c70.js"><link rel="prefetch" href="/assets/js/52.5d9e5954.js"><link rel="prefetch" href="/assets/js/53.c2a57b23.js"><link rel="prefetch" href="/assets/js/54.200dfb09.js"><link rel="prefetch" href="/assets/js/55.50e28dae.js"><link rel="prefetch" href="/assets/js/56.69f79320.js"><link rel="prefetch" href="/assets/js/57.261e564c.js"><link rel="prefetch" href="/assets/js/58.c192e345.js"><link rel="prefetch" href="/assets/js/59.d5b4faab.js"><link rel="prefetch" href="/assets/js/6.870d525b.js"><link rel="prefetch" href="/assets/js/60.0592c12c.js"><link rel="prefetch" href="/assets/js/7.e36ca661.js"><link rel="prefetch" href="/assets/js/8.3bccdd02.js"><link rel="prefetch" href="/assets/js/9.20671d54.js"><link rel="prefetch" href="/assets/js/vendors~flowchart.abb00470.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.9b7d2f06.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div><div class="theme-container" data-v-4698c43e><div data-v-4698c43e><div id="loader-wrapper" class="loading-wrapper" data-v-4b73742e data-v-4698c43e data-v-4698c43e><div class="loader-main" data-v-4b73742e><div data-v-4b73742e></div><div data-v-4b73742e></div><div data-v-4b73742e></div><div data-v-4b73742e></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-6cbeab0a data-v-4698c43e data-v-4698c43e><h3 class="title" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a>originalxzx</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a><input type="password" value="" data-v-6cbeab0a> <span data-v-6cbeab0a>Konck! Knock!</span> <button data-v-6cbeab0a>OK</button></label> <div class="footer" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a><span data-v-6cbeab0a><i class="iconfont reco-theme" data-v-6cbeab0a></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-6cbeab0a>vuePress-theme-reco</a></span> <span data-v-6cbeab0a><i class="iconfont reco-copyright" data-v-6cbeab0a></i> <a data-v-6cbeab0a><span data-v-6cbeab0a>originalxzx</span>
+            
+          <!---->
+          2020
+        </a></span></div></div> <div class="hide" data-v-4698c43e><header class="navbar" data-v-4698c43e><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">originalxzx</span></a> <div class="links"><div class="color-picker"><a class="color-button"><i class="iconfont reco-color"></i></a> <div class="color-picker-menu" style="display:none;"><div class="mode-options"><h4 class="title">Choose mode</h4> <ul class="color-mode-options"><li class="dark">dark</li><li class="auto active">auto</li><li class="light">light</li></ul></div></div></div> <div class="search-box"><i class="iconfont reco-search"></i> <input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  Home
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      Category
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/arts/" class="nav-link"><i class="iconfont undefined"></i>
+  arts
+</a></li><li class="dropdown-item"><!----> <a href="/categories/backEnd/" class="nav-link"><i class="iconfont undefined"></i>
+  backEnd
+</a></li><li class="dropdown-item"><!----> <a href="/categories/travel/" class="nav-link"><i class="iconfont undefined"></i>
+  travel
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/timeLine/" class="nav-link"><i class="iconfont reco-date"></i>
+  TimeLine
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-blog"></i>
+      tools
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://cli.im/" target="_blank" rel="noopener noreferrer" class="nav-link external"><i class="iconfont undefined"></i>
+  二维码生成器
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask" data-v-4698c43e></div> <aside class="sidebar" data-v-4698c43e><div class="personal-info-wrapper" data-v-6c8ffc9c><!----> <h3 class="name" data-v-6c8ffc9c>
+    originalxzx
+  </h3> <div class="num" data-v-6c8ffc9c><div data-v-6c8ffc9c><h3 data-v-6c8ffc9c>42</h3> <h6 data-v-6c8ffc9c>文章</h6></div> <div data-v-6c8ffc9c><h3 data-v-6c8ffc9c>15</h3> <h6 data-v-6c8ffc9c>标签</h6></div></div> <hr data-v-6c8ffc9c></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  Home
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      Category
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/arts/" class="nav-link"><i class="iconfont undefined"></i>
+  arts
+</a></li><li class="dropdown-item"><!----> <a href="/categories/backEnd/" class="nav-link"><i class="iconfont undefined"></i>
+  backEnd
+</a></li><li class="dropdown-item"><!----> <a href="/categories/travel/" class="nav-link"><i class="iconfont undefined"></i>
+  travel
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/timeLine/" class="nav-link"><i class="iconfont reco-date"></i>
+  TimeLine
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-blog"></i>
+      tools
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://cli.im/" target="_blank" rel="noopener noreferrer" class="nav-link external"><i class="iconfont undefined"></i>
+  二维码生成器
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>记一次mysql死锁问题</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/categories/mysql_dead_lock.html#死锁悄然而至" class="sidebar-link">死锁悄然而至</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/categories/mysql_dead_lock.html#死锁日志分析" class="sidebar-link">死锁日志分析</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/categories/mysql_dead_lock.html#分析sql" class="sidebar-link">分析sql</a><ul class="sidebar-sub-headers"></ul></li></ul></section></li></ul> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-6cbeab0a data-v-4698c43e><h3 class="title" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a>记一次mysql死锁问题</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a><input type="password" value="" data-v-6cbeab0a> <span data-v-6cbeab0a>Konck! Knock!</span> <button data-v-6cbeab0a>OK</button></label> <div class="footer" style="display:none;" data-v-6cbeab0a data-v-6cbeab0a><span data-v-6cbeab0a><i class="iconfont reco-theme" data-v-6cbeab0a></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-6cbeab0a>vuePress-theme-reco</a></span> <span data-v-6cbeab0a><i class="iconfont reco-copyright" data-v-6cbeab0a></i> <a data-v-6cbeab0a><span data-v-6cbeab0a>originalxzx</span>
+            
+          <!---->
+          2020
+        </a></span></div></div> <div data-v-4698c43e><main class="page"><!----> <div class="page-title" style="display:none;"><h1>记一次mysql死锁问题</h1> <hr> <div data-v-484a899e><i class="iconfont reco-account" data-v-484a899e><span data-v-484a899e>originalxzx</span></i> <i class="iconfont reco-date" data-v-484a899e><span data-v-484a899e>2019-07-15</span></i> <i class="iconfont reco-eye" data-v-484a899e><span id="/categories/mysql_dead_lock.html" data-flag-title="Your Article Title" class="leancloud-visitors" data-v-484a899e><a class="leancloud-visitors-count" style="font-size:.9rem;font-weight:normal;color:#999;"></a></span></i> <i class="iconfont reco-tag tags" data-v-484a899e><span class="tag-item" data-v-484a899e>
+      后端
+    </span><span class="tag-item" data-v-484a899e>
+      msql
+    </span></i></div></div> <div class="theme-reco-content content__default" style="display:none;"><div class="custom-block tip"><p>本人从业以来第一次碰到数据库死锁问题，当然是深究到底,不可忽略了。</p></div> <h2 id="死锁悄然而至"><a href="#死锁悄然而至" class="header-anchor">#</a> 死锁悄然而至</h2> <p>一天下午发现服务报错，报错信息如下</p> <div class="language- extra-class"><pre class="language-text"><code>com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction
+at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+at com.mysql.jdbc.Util.handleNewInstance(Util.java:404)
+at com.mysql.jdbc.Util.getInstance(Util.java:387)
+at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:950)
+at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3966)
+at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3902)
+at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2526)
+at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2673)
+at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2549)
+at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1861)
+at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2073)
+at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2009)
+at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5098)
+at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1994)
+at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeUpdate(DruidPooledPreparedStatement.java:253)
+at com.dianping.zebra.single.jdbc.SinglePreparedStatement$2.doAction(SinglePreparedStatement.java:92)
+at com.dianping.zebra.single.jdbc.SinglePreparedStatement$2.doAction(SinglePreparedStatement.java:80)
+at com.dianping.zebra.single.jdbc.SingleStatement.executeWithFilterOrigin(SingleStatement.java:228)
+at com.dianping.zebra.single.jdbc.SingleStatement.access$000(SingleStatement.java:37)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:215)
+at com.dianping.zebra.filter.DefaultJdbcFilter.executeSingleStatement(DefaultJdbcFilter.java:60)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.filter.DefaultJdbcFilter.executeSingleStatement(DefaultJdbcFilter.java:60)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.filter.audit.AuditFilter.executeSingleStatement(AuditFilter.java:67)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.filter.DefaultJdbcFilter.executeSingleStatement(DefaultJdbcFilter.java:60)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.filter.DefaultJdbcFilter.executeSingleStatement(DefaultJdbcFilter.java:60)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.monitor.filter.CatFilter.executeSingleStatement(CatFilter.java:261)
+at com.dianping.zebra.single.jdbc.SingleStatement$8.executeSingleStatement(SingleStatement.java:212)
+at com.dianping.zebra.single.jdbc.SingleStatement.executeWithFilter(SingleStatement.java:220)
+at com.dianping.zebra.single.jdbc.SinglePreparedStatement.executeUpdate(SinglePreparedStatement.java:80)
+at com.dianping.zebra.group.jdbc.GroupPreparedStatement.executeUpdateOnConnection(GroupPreparedStatement.java:177)
+at com.dianping.zebra.group.jdbc.GroupPreparedStatement.executeUpdate(GroupPreparedStatement.java:161)
+at com.dianping.zebra.group.jdbc.GroupPreparedStatement.execute(GroupPreparedStatement.java:100)
+</code></pre></div><p>当时一点惊讶，有有一点兴奋，毕竟是第一次碰到这种事，多新鲜啊，能不兴奋吗？😂<br>
+从报错信息可以看出，大概是某一个事务一直拿不到锁（发现死锁），就回滚了，也就是这个操作算是无效了。<br>
+这个时候我们再去看看死锁相关事务的日志</p> <div class="language- extra-class"><pre class="language-text"><code>------------------------
+LATEST DETECTED DEADLOCK
+------------------------
+2019-08-01 12:04:43 0x7fc55ee5c700
+*** (1) TRANSACTION:
+TRANSACTION 4795708646, ACTIVE 0 sec fetching rows
+mysql tables in use 1, locked 1
+LOCK WAIT 12 lock struct(s), heap size 1136, 27 row lock(s)
+MySQL thread id 47505621, OS thread handle 140469423318784, query id 25961909428 10.64.129.102 activity updating
+/*id:f2de8e66*/update Bwc_Win_Candidate
+     SET state = 2 
+     WHERE (  activity_id = '1310731492'
+                  and user_id = 85***208
+                  and extra_id = '1310731492'
+                  and extra_type = 1 )
+*** (1) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 316 page no 316 n bits 256 index PRIMARY of table `DPCityActivity`.`Bwc_Win_Candidate` trx id 4795708646 lock_mode X locks rec but not gap waiting
+*** (2) TRANSACTION:
+TRANSACTION 4795708632, ACTIVE 0 sec fetching rows
+mysql tables in use 1, locked 1
+160 lock struct(s), heap size 24784, 29593 row lock(s)
+MySQL thread id 47507030, OS thread handle 140485677401856, query id 25961909390 10.81.65.15 activity updating
+/*id:f2de8e66*/update Bwc_Win_Candidate
+     SET state = 2 
+     WHERE (  activity_id = '1034085677'
+                  and user_id = 15***741
+                  and extra_id = '1034085677'
+                  and extra_type = 1 )
+*** (2) HOLDS THE LOCK(S):
+RECORD LOCKS space id 316 page no 316 n bits 256 index PRIMARY of table `DPCityActivity`.`Bwc_Win_Candidate` trx id 4795708632 lock_mode X
+*** (2) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 316 page no 317 n bits 256 index PRIMARY of table `DPCityActivity`.`Bwc_Win_Candidate` trx id 4795708632 lock_mode X waiting
+*** WE ROLL BACK TRANSACTION (1)
+</code></pre></div><p>说是看日志，前提是看得懂日志呀，我先来一步一步搞懂日志的含义吧</p> <h2 id="死锁日志分析"><a href="#死锁日志分析" class="header-anchor">#</a> 死锁日志分析</h2> <p>(1) TRANSACTION: <em>事务1</em><br> <strong>TRANSACTION 4795708646, ACTIVE 0 sec fetching rows</strong><br>
+事务编号4795708646，活跃0秒，fetching rows表示事务状态：<br></p> <ul><li>fetching rows 表示事务状态在row_search_for_mysql中被设置，表示正在查找记录。</li> <li>updating or deleting 表示事务已经真正进入了Update/delete的函数逻辑（row_update_for_mysql）</li> <li>thread declared inside InnoDB 说明事务已经进入innodb层。通常而言 不在innodb层的事务大部分是会被回滚的。</li> <li>starting index read 表示根据索引读取数据。</li></ul> <p>就是说事务1在查找记录这个状态活跃时间是0s。<br> <strong>mysql tables in use 1, locked 1</strong><br>
+说明当前的事务使用一个表。locked 1 表示表上有一个表锁,对于DML语句为<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html">LOCK_IX</a> <br></p> <p><strong>LOCK WAIT 12 lock struct(s), heap size 1136, 27 row lock(s)</strong> <br>
+LOCK WAIT表示正在等待锁, 2 lock struct(s) 表示trx-&gt;trx_locks锁链表的长度为12，每个链表节点代表该事务持有的一个锁结构，包括表锁，记录锁以及auto_inc锁等。本案例中12locks 表示IX锁和lock_mode X(<a href="https://blog.csdn.net/albertfly/article/details/78493245">Next-key lock</a>)<br>
+heap size 1136 表示事务分配的锁堆内存大小,一般没有什么具体的用处。<br>
+27 row lock(s)表示当前事务持有的行记录锁/gap 锁的个数。<br></p> <p><strong>MySQL thread id 47507030, OS thread handle 140485677401856, query id 25961909390 10.81.65.15 activity updating</strong>
+表示一些ip地址，线程id等信息，基本没啥用。<br></p> <p><strong>update Bwc_Win_Candidate SET state = 2 WHERE (  activity_id = '1034085677'and user_id = 15741 and extra_id ='1034085677' and extra_type = 1 )</strong> <br>
+表示事务1正在执行的sql，通常显示正在等待锁的sql。<br></p> <p><strong>WAITING FOR THIS LOCK TO BE GRANTED</strong> <br>
+表示事务1等在等待锁。<br></p> <p><strong>RECORD LOCKS space id 316 page no 316 n bits 256 index PRIMARY of table <code>DPCityActivity</code>.<code>Bwc_Win_Candidate</code> trx id 4795708646 lock_mode X locks rec but not gap waiting</strong> <br>
+RECORD LOCKS 表示记录锁，space id 为316（对应的聚集索引），page号为4，n bits 256 表示这个聚集索引记录锁上留有256个Bit位。后面表示正在等待Bwc_Win_Candidate表中的主键PRIMARY上的X锁释放。<br>
+分析后面的日志，可以看到事务二持有29593个行锁<br></p> <p><strong>HOLDS THE LOCK(S):RECORD LOCKS space id 316 page no 316 n bits 256 index PRIMARY of table <code>DPCityActivity</code>.<code>Bwc_Win_Candidate</code> trx id 4795708632 lock_mode X</strong>
+事务2 持有主键PRIMARY索引（index PRIMARY ）上的锁资源,space id为316<br></p> <p><strong>) WAITING FOR THIS LOCK TO BE GRANTED:RECORD LOCKS space id 316 page no 317 n bits 256 index PRIMARY of table <code>DPCityActivity</code>.<code>Bwc_Win_Candidate</code> trx id 4795708632</strong> <br>
+事务2在等待主键PRIMARY上的索引的X锁释放。<br> <strong>WE ROLL BACK TRANSACTION (1)</strong> <br>
+事务1回滚。</p> <p>从日志可以分析出：<br>
+事务1在执行sql 1的时候发生死锁，说明sql 1对应的行记录的锁被事务2占有； <br>
+事务2在执行sql 2的时候发生死锁，说明sql 2对应的行记录的锁被事务1占有；<br> <img src="http://p0.meituan.net/scarlett/2210520a58f4709d36a63e2778524a0a41841.jpg" width="50%" height="auto" div="" align="right/"> <br>
+就是说sql扫描命中的行数过多，导致加锁的行数过多，在高并发情况下，发生了死锁。</p> <h2 id="分析sql"><a href="#分析sql" class="header-anchor">#</a> 分析sql</h2> <p>表结构：</p> <blockquote><p>PRIMARY KEY (<code>id</code>),<br>
+UNIQUE KEY <code>UK_A_B_U</code> (<code>activity_id</code>,<code>business_key</code>,<code>user_id</code>),<br>
+KEY <code>IX_UpdateTime</code> (<code>updateTime</code>)</p></blockquote> <p>再看我写的sql语句:</p> <blockquote><p>update Bwc_Win_CandidateSET state = 2 WHERE (  activity_id = '1034085677' and user_id = 15***741 and extra_id = '1034085677 and extra_type = 1 )</p></blockquote> <p>可以发现问题，虽然表中有了唯一索引，但是在更新查询时并不能命中唯一索引，因为where条件里面缺少business_key字段，无法命中唯一索引，就当是普通索引了，所以查询扫描是命中的行数才过多。<a href="https://my.oschina.net/u/945573/blog/2985834">联合索引原理解析</a></p><hr>
+解决方案：在查询的过程中加入business_key字段，保证全部命中联合唯一索引。<p></p></div> <footer class="page-edit" style="display:none;"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">3/17/2020, 6:11:29 PM</span></div></footer> <!----> <!----></main> <!----> <div class="comments-wrapper" data-v-4698c43e><div class="valine-wrapper"><div id="valine"></div></div></div></div></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-a81d141e data-v-a81d141e><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-a81d141e><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-a81d141e></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-a81d141e></path></svg></div><div class="reco-bgm-panel" data-v-512e724b><audio id="bgm" src="http://music.163.com/song/media/outer/url?id=25707139.mp3" data-v-512e724b></audio> <div class="reco-float-box" style="bottom:100px;z-index:999999;display:none;" data-v-512e724b><img src="http://p0.meituan.net/scarlett/dc2299bb37cc4ecd472d8ae10e56f12e330651.jpg" data-v-512e724b></div> <div class="reco-bgm-box" style="left:10px;bottom:10px;z-index:999999;display:;" data-v-512e724b><div class="reco-bgm-cover" style="background-image:url(http://p0.meituan.net/scarlett/dc2299bb37cc4ecd472d8ae10e56f12e330651.jpg);" data-v-512e724b><div class="mini-operation" style="display:none;" data-v-512e724b><i class="reco-bgm reco-bgm-pause" style="display:none;" data-v-512e724b></i> <i class="reco-bgm reco-bgm-play" style="display:none;" data-v-512e724b></i></div> <div class="falut-message" style="display:none;" data-v-512e724b>
+        播放失败
+      </div></div> <div class="reco-bgm-info" style="display:;" data-v-512e724b><div class="info-box" data-v-512e724b><i class="reco-bgm reco-bgm-music music" data-v-512e724b></i>一生所爱</div> <div class="info-box" data-v-512e724b><i class="reco-bgm reco-bgm-artist" data-v-512e724b></i>卢冠廷</div> <div class="reco-bgm-progress" data-v-512e724b><div class="progress-bar" data-v-512e724b><div class="bar" data-v-512e724b></div></div></div> <div class="reco-bgm-operation" data-v-512e724b><i class="reco-bgm reco-bgm-last last" data-v-512e724b></i> <i class="reco-bgm reco-bgm-pause pause" style="display:none;" data-v-512e724b></i> <i class="reco-bgm reco-bgm-play play" style="display:;" data-v-512e724b></i> <i class="reco-bgm reco-bgm-next next" data-v-512e724b></i> <i class="reco-bgm reco-bgm-volume1 volume" style="display:;" data-v-512e724b></i> <i class="reco-bgm reco-bgm-mute mute" style="display:none;" data-v-512e724b></i> <div class="volume-bar" data-v-512e724b><div class="bar" data-v-512e724b></div></div></div></div> <div class="reco-bgm-left-box" style="display:;" data-v-512e724b><i class="reco-bgm reco-bgm-left" data-v-512e724b></i></div></div></div></div></div>
+    <script src="/assets/js/app.bc3533d3.js" defer></script><script src="/assets/js/4.3246cf6a.js" defer></script><script src="/assets/js/1.4b387ef0.js" defer></script><script src="/assets/js/49.090490ed.js" defer></script>
+  </body>
+</html>
